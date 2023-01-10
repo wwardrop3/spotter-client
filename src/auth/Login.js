@@ -1,14 +1,30 @@
-import { Button } from "@mui/material"
+import { Button, Container, Grid } from "@mui/material"
+import { border } from "@mui/system"
 import React, { useRef } from "react"
-import { Link, Redirect, useHistory } from "react-router-dom"
+import { Link, Redirect, Route, useHistory } from "react-router-dom"
+import { getProfile } from "../components/navbar/NavbarManager"
 import "./Auth.css"
+import { Register } from "./Register"
 
 
-export const Login = () => {
+export const Login = ({ profile, setProfile }) => {
     const username = useRef()
     const password = useRef()
     const invalidDialog = useRef()
     const history = useHistory()
+
+
+    const getProfileInfo = () => {
+
+        getProfile()
+            .then(
+                (response) => {
+                    setProfile(response)
+                }
+            )
+
+    }
+
 
     const handleLogin = (e) => {
         e.preventDefault()
@@ -28,7 +44,8 @@ export const Login = () => {
             .then(res => {
                 if ("valid" in res && res.valid && "token" in res) {
                     localStorage.setItem("token", res.token)
-                    history.push("/home")
+                    getProfileInfo()
+                    history.push("/")
                 }
                 else {
                     invalidDialog.current.showModal()
@@ -37,37 +54,45 @@ export const Login = () => {
     }
 
     return (
-        <main className="container--login">
-            <dialog className="dialog dialog--auth" ref={invalidDialog}>
-                <div>Username or password was not valid.</div>
-                <button className="button--close" onClick={e => invalidDialog.current.close()}>Close</button>
-            </dialog>
-            <section>
-                <form className="form--login" onSubmit={handleLogin}>
-                    <h1>Spotter</h1>
-                    <h2>Please sign in</h2>
-                    <fieldset>
-                        <label htmlFor="inputUsername"> Username address </label>
-                        <input ref={username} type="username" id="username" className="form-control" placeholder="Username address" required autoFocus />
-                    </fieldset>
-                    <fieldset>
-                        <label htmlFor="inputPassword"> Password </label>
-                        <input ref={password} type="password" id="password" className="form-control" placeholder="Password" required />
-                    </fieldset>
-                    <fieldset style={{
-                        textAlign: "center"
-                    }}>
-                        <button className="btn btn-1 btn-sep icon-send" type="submit">Sign In</button>
-                    </fieldset>
-                </form>
-            </section>
-            <section className="link--register">
-                <Button onClick={
-                    () => {
-                        <Redirect to={"/home"}></Redirect>
-                    }
-                }>Register</Button>
-            </section>
-        </main>
-    )
+        <>
+
+            <Container style={{ display: "flex", flexDirection: "column" }}>
+                <dialog className="dialog dialog--auth" ref={invalidDialog}>
+                    <div>Username or password was not valid.</div>
+                    <button className="button--close" onClick={e => invalidDialog.current.close()}>Close</button>
+                </dialog>
+                <Grid container>
+                    <Grid item xs={12}>Spotter</Grid>
+                    <Grid item border={"3px red solid"}>
+
+                        <form className="form--login" onSubmit={handleLogin}>
+
+                            <h2>Please sign in</h2>
+                            <div>
+                                <label htmlFor="inputUsername"> Username </label>
+                                <input ref={username} type="username" id="username" className="form-control" placeholder="Username" required autoFocus />
+                            </div>
+                            <fieldset>
+                                <label htmlFor="inputPassword"> Password </label>
+                                <input ref={password} type="password" id="password" className="form-control" placeholder="Password" required />
+                            </fieldset>
+                            <fieldset style={{
+                                textAlign: "center"
+                            }}>
+                                <button className="btn btn-1 btn-sep icon-send" type="submit">Sign In</button>
+                            </fieldset>
+                        </form>
+                    </Grid>
+
+                </Grid>
+                <section className="link--register">
+                    <Button onClick={
+                        () => {
+                            history.push("/register")
+                        }
+                    }>Register</Button>
+                </section>
+            </Container>
+
+        </>)
 }

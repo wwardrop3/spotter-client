@@ -1,34 +1,53 @@
-import { Button, Container, Grid, Typography } from "@mui/material"
+import { Button, Container, Grid, SvgIcon, Typography } from "@mui/material"
+
+import { useEffect, useState } from "react"
+import { getProfile } from "./NavbarManager"
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 
-export const Navbar = () => {
+export const Navbar = ({ profile, setProfile }) => {
+
+
+
 
 
     return (
         <>
 
-            <Container maxWidth="lg" >
+            <Container xs={12} style={{ border: "3px green solid", display: "flex", justifyContent: "space-around" }}>
 
-                <Typography variant="h5">
-                    <Grid container style={{ display: "flex", justifyContent: "space-around" }}>
-
-                        <Grid item>
-                            <Button>
-                                Menu
-                            </Button>
-
-                        </Grid>
-
-                        <Grid item>
-                            <Button>
-                                Plans
-                            </Button>
-                        </Grid>
+                {profile ? profile.first_name
+                    : ""}
 
 
+                <Grid item>
+                    <Button>
+                        Home
+                    </Button>
 
-                    </Grid>
-                </Typography>
+                </Grid>
+
+                <Grid item>
+                    <Button>
+                        Plans
+                    </Button>
+                </Grid>
+
+                <Grid item>
+                    <Button>
+                        Exercises
+                    </Button>
+                </Grid>
+
+                <Grid items display={"flex"}>
+
+                    <Button variant="contained" endIcon={<AccountCircleIcon />}>{profile?.user.first_name}</Button>
+                </Grid>
+
+
+
+
+
 
 
 

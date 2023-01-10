@@ -4,11 +4,9 @@ import { useEffect, useState } from "react"
 import { getExercises } from "../auth/AuthManager"
 
 
-export const Homepage = () => {
-
+export const Homepage = ({ profile }) => {
 
     const [exercises, setExercises] = useState()
-
 
     useEffect(
         () => {
@@ -22,15 +20,17 @@ export const Homepage = () => {
     )
 
 
+
+
     return (
 
         <>
 
-            <Container maxWidth="lg">
+            <Container xs={12} style={{ border: "3px orange solid", minHeight: "100vh" }}>
 
                 <Grid container className="">
-                    <Typography varient="h2">
-                        Homepage
+                    <Typography variant="h5" fontFamily={"cursive"}>
+                        <div>Welcome {profile?.user.first_name}</div>
                     </Typography>
                 </Grid>
 
